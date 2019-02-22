@@ -1,21 +1,17 @@
 package com.example.fitnessresttimer
 
+import android.os.Bundle
+import android.os.CountDownTimer
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
-   
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-  
+import android.support.v7.app.AppCompatActivity
+import android.view.*
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,9 +39,9 @@ class MainActivity : AppCompatActivity() {
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+                .setAction("Action", null).show()
         }
-  
+
     }
 
 
@@ -67,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
-  
+
 
     /**
      * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -83,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun getCount(): Int {
             // Show 3 total pages.
-            return 3
+            return 4
         }
     }
 
@@ -92,11 +88,39 @@ class MainActivity : AppCompatActivity() {
      */
     class PlaceholderFragment : Fragment() {
 
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                                  savedInstanceState: Bundle?): View? {
+        private lateinit var timer: CountDownTimer
+
+        override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
             val rootView = inflater.inflate(R.layout.fragment_main, container, false)
-            rootView.section_label.text = getString(R.string.section_format, arguments?.getInt(ARG_SECTION_NUMBER))
+
+            startTimer()
+
+            rootView.setOnClickListener {
+                Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
+                timer.start()
+            }
+
             return rootView
+        }
+
+        fun startTimer() {
+            val sectionNumber = arguments?.getInt(ARG_SECTION_NUMBER)
+            timer = object : CountDownTimer(30000 * (sectionNumber ?: 1).toLong(), 1000) {
+
+                override fun  onTick(millisUntilFinished: Long) {
+                    val mins = millisUntilFinished / 1000 / 60
+                    val seconds = millisUntilFinished / 1000 - mins
+
+                    view?.section_label?.text = String.format("%02d:%02d", mins, seconds)
+                }
+
+                override fun onFinish() {
+                    view?.section_label?.text = "Work out !"
+                }
+            }
         }
 
         companion object {
