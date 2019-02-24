@@ -1,4 +1,4 @@
-package com.example.fitnessresttimer
+package com.gcrieloue.fitnessresttimer
 
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -88,19 +88,22 @@ class MainActivity : AppCompatActivity() {
      */
     class PlaceholderFragment : Fragment() {
 
-        private lateinit var timer: CountDownTimer
+        enum class State {
+            INIT,
+            STARTED
+        }
+
+        private var state: State = State.INIT
 
         override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View? {
             val rootView = inflater.inflate(R.layout.fragment_main, container, false)
-
-            startTimer()
-
+            view?.section_label?.text = "Go"
             rootView.setOnClickListener {
                 Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
-                timer.start()
+                startTimer()
             }
 
             return rootView
@@ -108,19 +111,33 @@ class MainActivity : AppCompatActivity() {
 
         fun startTimer() {
             val sectionNumber = arguments?.getInt(ARG_SECTION_NUMBER)
-            timer = object : CountDownTimer(30000 * (sectionNumber ?: 1).toLong(), 1000) {
 
-                override fun  onTick(millisUntilFinished: Long) {
-                    val mins = millisUntilFinished / 1000 / 60
-                    val seconds = millisUntilFinished / 1000 - mins
+            if (state == State.STARTED) {
+                timer.cancel()
+            }
+            state = State.STARTED
 
-                    view?.section_label?.text = String.format("%02d:%02d", mins, seconds)
+            timer = object : CountDownTimer(DEFAULT_COUNTDOWN_SECONDS * 1000 * (sectionNumber ?: 1).toLong(), 1000) {
+
+                override fun onTick(millisUntilFinished: Long) {
+                    val seconds = millisUntilFinished / 1000
+                    val remainingMinutes = seconds / 60
+                    val remainingSeconds = seconds % 60
+
+                    view?.section_label?.visibility = View.GONE
+                    view?.remaining_minutes?.visibility = View.VISIBLE
+                    view?.remaining_seconds?.visibility = View.VISIBLE
+                    view?.remaining_minutes?.text = String.format("%02d", remainingMinutes)
+                    view?.remaining_seconds?.text = String.format("%02d", remainingSeconds)
                 }
 
                 override fun onFinish() {
                     view?.section_label?.text = "Work out !"
+                    view?.section_label?.visibility = View.VISIBLE
+                    view?.remaining_minutes?.visibility = View.GONE
+                    view?.remaining_seconds?.visibility = View.GONE
                 }
-            }
+            }.start()
         }
 
         companion object {
@@ -129,6 +146,10 @@ class MainActivity : AppCompatActivity() {
              * fragment.
              */
             private val ARG_SECTION_NUMBER = "section_number"
+
+            private val DEFAULT_COUNTDOWN_SECONDS = 90
+
+            private lateinit var timer: CountDownTimer
 
             /**
              * Returns a new instance of this fragment for the given section

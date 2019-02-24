@@ -1,4 +1,4 @@
-package com.example.fitnessresttimer
+package com.gcrieloue.fitnessresttimer
 
 import org.junit.Test
 

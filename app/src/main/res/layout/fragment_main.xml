@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             xmlns:app="http://schemas.android.com/apk/res-auto"
-                                             xmlns:tools="http://schemas.android.com/tools"
-                                             android:id="@+id/constraintLayout"
-                                             android:layout_width="match_parent"
-                                             android:layout_height="match_parent"
-                                             tools:context=".MainActivity$PlaceholderFragment">
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+                                              xmlns:app="http://schemas.android.com/apk/res-auto"
+                                              xmlns:tools="http://schemas.android.com/tools"
+                                              android:id="@+id/constraintLayout"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="match_parent"
+                                              android:gravity="center"
+                                              tools:context=".MainActivity$PlaceholderFragment">
 
     <TextView
+            android:text="Go"
             android:id="@+id/section_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:layout_constraintTop_creator="1"
-            android:layout_marginTop="364dp"
-            tools:layout_constraintLeft_creator="1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-            />
-
-</android.support.constraint.ConstraintLayout>
+            android:textSize="128sp"
+    />
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content">
+        <TextView
+                android:text="01"
+                android:id="@+id/remaining_minutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textSize="128sp"/>
+        <TextView
+                android:text="30"
+                android:id="@+id/remaining_seconds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textSize="64sp"/>
+    </LinearLayout>
+</android.support.v7.widget.LinearLayoutCompat>

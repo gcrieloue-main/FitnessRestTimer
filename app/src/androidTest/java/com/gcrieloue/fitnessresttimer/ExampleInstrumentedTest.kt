@@ -1,4 +1,4 @@
-package com.example.fitnessresttimer
+package com.gcrieloue.fitnessresttimer
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
